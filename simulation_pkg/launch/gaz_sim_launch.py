@@ -10,32 +10,17 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import TimerAction
 
 
 def generate_launch_description():
     package_name = 'simulation_pkg'
 
-    # Check if we're told to use sim time
-    use_sim_time = LaunchConfiguration('use_sim_time')
-
-    # Get the urdf/xacro file path
-    pkg_share = get_package_share_directory(package_name)
-    path_to_urdf = get_package_share_path(package_name) /'description'/'robot_urdf.xacro'
-
-
-    gz_resource_path = SetEnvironmentVariable(
-    name='GZ_SIM_RESOURCE_PATH',
-    value=':'.join([
-        pkg_share,
-        os.path.join(pkg_share, 'models')
-    ])
-)
-
     # Create a robot_state_publisher node
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rsp_launch.py'
-                )]), launch_arguments={'use_sim_time': 'true', 'use_ros2_control': 'true'}.items()
+                )]), launch_arguments={'use_sim_time': 'true'}.items()
     )
 
     # Gazebo Fortress world
@@ -45,7 +30,7 @@ def generate_launch_description():
         'industrial-warehouse.sdf'
     )
 
-    gz_sim = IncludeLaunchDescription(
+    gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory('ros_gz_sim'),
@@ -53,11 +38,52 @@ def generate_launch_description():
                 'gz_sim.launch.py'
             )
         ),
-        launch_arguments={
-            'gz_args': f'-r {world}',
-            'on_exit_shutdown': 'true'
-        }.items(),
+        launch_arguments={'gz_args': ['-r -v4 ', world], 'on_exit_shutdown': 'true'}.items()
     )
+
+    # Spawn the robot in Gazebo
+    spawn_entity = Node(
+        package="ros_gz_sim",
+        executable="create",
+        arguments=[
+            "-name",
+            "agv_robot",
+            "-topic",
+            "robot_description",
+            "-x",
+            "0",
+            "-y",
+            "0",
+            "-z",
+            "0.1",
+        ],
+        output="screen",
+    )
+
+    rsp_delayed = TimerAction(
+        period=3.0,
+        actions=[
+            IncludeLaunchDescription(          # NEW instance, not reusing rsp
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory(package_name), 'launch', 'rsp_launch.py'
+                )]),
+                launch_arguments={'use_sim_time': 'true'}.items()
+            )
+        ]
+    )
+
+    # diff_controller_spawner = Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     arguments=['diff_controller']
+    # )
+
+    # # Run ros2 control spawner scripts
+    # joint_state_broadcaster_spawner = Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     arguments=['joint_state_broadcaster']
+    # )
 
     # Bridge gazebo parameters with ROS
     bridge_params = os.path.join(
@@ -83,40 +109,6 @@ def generate_launch_description():
         arguments=["/camera/image_raw"]
     )
 
-    # Spawn the robot in Gazebo
-    spawn_entity = Node(
-        package="ros_gz_sim",
-        executable="create",
-        arguments=[
-            "-name",
-            "agv_robot",
-            "-topic",
-            "/robot_description",
-            "-x",
-            "0",
-            "-y",
-            "0",
-            "-z",
-            "1.4",
-        ],
-        output="screen",
-    )
-
-    # Run ros2 control spawner scripts
-    joint_state_broadcaster_spawner = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=['joint_state_broadcaster'],
-        output='screen',
-    )
-
-    diff_controller_spawner = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=['diff_controller'],
-        output='screen',
-    )
-
     twist_mux_params = os.path.join(get_package_share_directory('simulation_pkg'), 'config', 'twist_mux.yaml')
     twist_mux = Node(
         package='twist_mux',
@@ -128,16 +120,16 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
-            default_value='true',
+            default_value='false',
             description='Use sim time if true'
         ),
-        gz_resource_path,
         rsp,
-        gz_sim,
+        gazebo,
+        rsp_delayed, 
         spawn_entity,
+        # joint_state_broadcaster_spawner,
+        # diff_controller_spawner,
         ros_gz_bridge,
         ros_gz_image_bridge,
-        joint_state_broadcaster_spawner,
-        diff_controller_spawner,
         twist_mux
     ])

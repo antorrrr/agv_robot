@@ -23,7 +23,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/base_foot_link.STL" />
+          filename="package://simulation_pkg/models/base_foot_link.STL" />
       </geometry>
       <material
         name="White">
@@ -37,7 +37,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/base_foot_link.STL" />
+          filename="package://simulation_pkg/models/base_foot_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -64,7 +64,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/base_link.STL" />
+          filename="package://simulation_pkg/models/base_link.STL" />
       </geometry>
       <material
         name="White">
@@ -78,7 +78,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/base_link.STL" />
+          filename="package://simulation_pkg/models/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -123,7 +123,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/right_wheel_link.STL" />
+          filename="package://simulation_pkg/models/right_wheel_link.STL" />
       </geometry>
       <material
         name="Black">
@@ -136,8 +136,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/right_wheel_link.STL" />
+        <cylinder radius="0.034" length="0.026" />
       </geometry>
     </collision>
   </link>
@@ -155,7 +154,7 @@
     <axis
       xyz="0 0 1" />
     <limit
-      effort="10"
+      effort="100"
       velocity="10" />
     <dynamics
       damping="0.1"
@@ -163,8 +162,12 @@
   </joint>
 
   <gazebo reference="right_wheel_link">
-        <material>Gazebo/Black</material>
-    </gazebo>
+    <material>Gazebo/Black</material>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+    <kp>1e6</kp>
+    <kd>1.0</kd>
+  </gazebo>
 
   <link
     name="left_wheel_link">
@@ -188,7 +191,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/left_wheel_link.STL" />
+          filename="package://simulation_pkg/models/left_wheel_link.STL" />
       </geometry>
       <material
         name="Black">
@@ -201,8 +204,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/left_wheel_link.STL" />
+        <cylinder radius="0.034" length="0.026" />
       </geometry>
     </collision>
   </link>
@@ -220,7 +222,7 @@
     <axis
       xyz="0 0 1" />
     <limit
-      effort="10"
+      effort="100"
       velocity="10" />
     <dynamics
       damping="0.1"
@@ -228,8 +230,12 @@
   </joint>
 
   <gazebo reference="left_wheel_link">
-        <material>Gazebo/Black</material>
-    </gazebo>
+    <material>Gazebo/Black</material>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+    <kp>1e6</kp>
+    <kd>1.0</kd>
+  </gazebo>
 
   <link
     name="front_caster_link">
@@ -253,7 +259,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/front_caster_link.STL" />
+          filename="package://simulation_pkg/models/front_caster_link.STL" />
       </geometry>
       <material
         name="Blue">
@@ -267,7 +273,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/front_caster_link.STL" />
+          filename="package://simulation_pkg/models/front_caster_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -284,16 +290,16 @@
       link="front_caster_link" />
     <axis
       xyz="0 0 0" />
-    <dynamics
+    <!-- <dynamics
       damping="0"
-      friction="0.001" />
+      friction="0.001" /> -->
   </joint>
 
   <gazebo reference="front_caster_link">
-        <material>Gazebo/Blue</material>
-        <mu1 value="0.001"/>
-        <mu2 value="0.001"/>
-    </gazebo>
+    <material>Gazebo/Blue</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
 
   <link
     name="rear_caster_link">
@@ -317,7 +323,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/rear_caster_link.STL" />
+          filename="package://simulation_pkg/models/rear_caster_link.STL" />
       </geometry>
       <material
         name="Blue">
@@ -331,7 +337,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/rear_caster_link.STL" />
+          filename="package://simulation_pkg/models/rear_caster_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -348,16 +354,16 @@
       link="rear_caster_link" />
     <axis
       xyz="0 0 0" />
-    <dynamics
+    <!-- <dynamics
       damping="0"
-      friction="0.001" />
+      friction="0.001" /> -->
   </joint>
 
   <gazebo reference="rear_caster_link">
-        <material>Gazebo/Blue</material>
-        <mu1 value="0.001"/>
-        <mu2 value="0.001"/>
-    </gazebo>
+    <material>Gazebo/Blue</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
 
   <link
     name="lidar_link">
@@ -381,7 +387,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/lidar_link.STL" />
+          filename="package://simulation_pkg/models/lidar_link.STL" />
       </geometry>
       <material
         name="Black">
@@ -395,7 +401,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/lidar_link.STL" />
+          filename="package://simulation_pkg/models/lidar_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -440,7 +446,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/camera_link.STL" />
+          filename="package://simulation_pkg/models/camera_link.STL" />
       </geometry>
       <material
         name="Green">
@@ -454,7 +460,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/antor/agv_robot_ws/install/simulation_pkg/share/simulation_pkg/models/camera_link.STL" />
+          filename="package://simulation_pkg/models/camera_link.STL" />
       </geometry>
     </collision>
   </link>

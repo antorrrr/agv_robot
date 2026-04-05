@@ -3,12 +3,31 @@
 <package format="3">
   <name>simulation_pkg</name>
   <version>1.0.0</version>
-  <description>Package to simulate my final year thesis robot using Gazebo and ROS2 Control</description>
-  <author email="aapost04@ucy.ac.cy">Apostolos Apostolou</author>
-  <maintainer email="aapost04@ucy.ac.cy">Apostolos Apostolou</maintainer>
+  <description>my 3-2 project</description>
+  <author email="antormondal003@gmail.com">Antor Mondal</author>
+  <maintainer email="antormondal003@gmail.com">Antor Mondal</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>ros_gz_image</exec_depend>
+
+  <exec_depend>gz_ros2_control</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>ros2_control</exec_depend>
+  <exec_depend>ros2_controllers</exec_depend>
+
+  <exec_depend>twist_mux</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
@@ -17,5 +36,7 @@
 
   <export>
     <build_type>ament_python</build_type>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+    <gazebo_ros gazebo_media_path="${prefix}/worlds"/>
   </export>
 </package>
